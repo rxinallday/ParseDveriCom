@@ -37,11 +37,10 @@ def download_and_convert_image(url, name):
 
 
 def parse_price(price_text):
-    """Очистка цены от пробелов и знака рубля, добавление 50%."""
     price = price_text.replace(" ", "").replace("₽", "").strip()
     try:
         price = float(price)
-        price_with_discount = price * 1.5  # добавление 50%
+        price_with_discount = price * 1.5  # Здесь +50% если нужно можете убрать
         return round(price_with_discount, 2)
     except ValueError:
         return None
@@ -59,7 +58,6 @@ def run_parser():
         page = browser.new_page()
         page.goto("https://dveri.com/")
 
-        # Ожидание 10 секунд для регистрации
         print("⏳ Ожидаем 10 секунд для регистрации...")
         time.sleep(10)
 
@@ -102,15 +100,13 @@ def run_parser():
                         price = card.query_selector(".card__price")
                         price = price.inner_text().strip() if price else "-"
 
-                        # Проверка на наличие метки "на заказ" или "sale"
                         badge = card.query_selector(".badge--card")
                         if badge:
                             badge_text = badge.inner_text().strip().lower()
                             if "на заказ" in badge_text or "sale" in badge_text:
                                 print(f"  🔴 {title} — Помечен как 'На заказ' или 'Sale'")
-                                card.set_style("background-color: black; color: white;")  # помечаем чёрным
+                                card.set_style("background-color: black; color: white;")
 
-                        # Парсим цену
                         parsed_price = parse_price(price)
 
                         href = card.query_selector("a")
