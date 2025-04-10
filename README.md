@@ -1,2 +1,2 @@
-# ParseDveriCom
-Parse prices
+# Парсер для dveri.com
+Парсит цены и выводит в .xlsx, добавляет к цене 50%
